@@ -42,7 +42,6 @@ public class VGLCParser {
 		String outputFile = dir+"/json_input/levels.json";
 		String outputdir = dir+"/json_input/";
 
-		// need to iterate over all the files in a directory
 		ArrayList<int[][]> examples = new ArrayList<>();
 		File file = new File(inputDirectory);
 		String[] fileList = file.list();
