@@ -23,13 +23,13 @@ public class VGLCParser {
 		tiles.put('-', 2);
 		tiles.put('?', 3);
 		tiles.put('Q', 4);
-		tiles.put('E', 5);  
+		tiles.put('E', 5);
 		tiles.put('<', 6);
 		tiles.put('>', 7);
 		tiles.put('[', 8);
 		tiles.put(']', 9);
 		tiles.put('o', 10);
-		tiles.put('B', 11); 
+		tiles.put('B', 11);
 		tiles.put('b', 12);
 	}
 
@@ -38,9 +38,9 @@ public class VGLCParser {
 	public static void main(String[] args) throws Exception {
 		String dir = System.getProperty("user.dir");
 		System.out.println("Working Directory = " + dir);
-		String inputDirectory = dir+"/src/main/resources/levels/";
-		String outputFile = dir+"/json_input/levels.json";
-		String outputdir = dir+"/json_input/";
+		String inputDirectory = dir + "/src/main/resources/levels/";
+		String outputFile = dir + "/json_input/levels.json";
+		String outputdir = dir + "/json_input/";
 
 		ArrayList<int[][]> examples = new ArrayList<>();
 		File file = new File(inputDirectory);
@@ -90,7 +90,6 @@ public class VGLCParser {
 		}
 	}
 
-
 	static int[] oneHot(int x) {
 		int[] vec = new int[tiles.size()];
 		vec[x] = 1;
@@ -114,7 +113,7 @@ public class VGLCParser {
 			for (int x = 0; x < width; x++) {
 				try { // Added error checking to deal with unrecognized tile types
 					a[y][x] = tiles.get(lines.get(y).charAt(x));
-				} catch(Exception e) {
+				} catch (Exception e) {
 					System.out.println("Problem on ");
 					System.out.println("\ty = " + y);
 					System.out.println("\tx = " + x);
@@ -135,34 +134,34 @@ public class VGLCParser {
 
 		// Empty array
 		int nbRows = inputArray.length;
-		if (nbRows==0 ) {
+		if (nbRows == 0) {
 			Settings.printWarnMsg("arrayToString: input array is empty.");
 			outputStr += "[]";
 			return outputStr;
 		}
 		// Empty array
 		int nbCols = inputArray[0].length;
-		if (nbCols==0) {
+		if (nbCols == 0) {
 			Settings.printWarnMsg("arrayToString: input array is empty.");
 			outputStr += "[";
 			outputStr += "[]";
-			for (int i=1; i<nbRows; i++) { 
+			for (int i = 1; i < nbRows; i++) {
 				outputStr += ", []";
 			}
 			outputStr += "]";
 			return outputStr;
 		}
 
-		outputStr += "[";   // matrix starter
-		int i=0;
-		outputStr += "[";   // row starter
+		outputStr += "["; // matrix starter
+		int i = 0;
+		outputStr += "["; // row starter
 		outputStr += inputArray[i][0];
 		for (int j = 1; j < nbCols - 1; j++) { // column
 			outputStr += "," + inputArray[i][j];
 		}
 		outputStr += "]";
-		for (i=1; i<nbRows-1; i++) { // loop rows
-			outputStr += ", [";   // row starter
+		for (i = 1; i < nbRows - 1; i++) { // loop rows
+			outputStr += ", ["; // row starter
 			outputStr += inputArray[i][0];
 			for (int j = 1; j < nbCols - 1; j++) { // column
 				outputStr += "," + inputArray[i][j];

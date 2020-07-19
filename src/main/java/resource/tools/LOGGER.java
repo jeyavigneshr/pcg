@@ -8,91 +8,88 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.text.DecimalFormat;
 
-
 public class LOGGER {
 
-    private static int count = 0;
+	private static int count = 0;
 
-    public static void save(String fileName) {
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(fileName);
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
-            bw.write(history);
-            bw.close();
-            System.out.println("\n\nlog file saved to " + fileName);
-        } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + e.getMessage());
-        } catch (IOException e) {
-            System.err.println("I/O Error: " + e.getMessage());
-        }
-    }
+	public static void save(String fileName) {
+		FileOutputStream fos = null;
+		try {
+			fos = new FileOutputStream(fileName);
+			BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(fos));
+			bw.write(history);
+			bw.close();
+			System.out.println("\n\nlog file saved to " + fileName);
+		} catch (FileNotFoundException e) {
+			System.err.println("File not found: " + e.getMessage());
+		} catch (IOException e) {
+			System.err.println("I/O Error: " + e.getMessage());
+		}
+	}
 
-    public enum VERBOSE_MODE {ALL, INFO, WARNING, ERROR, TOTAL_SILENCE}
-    static TextArea textAreaConsole = null;
-    private static VERBOSE_MODE verbose_mode = VERBOSE_MODE.TOTAL_SILENCE;
-    public static void setVerboseMode(VERBOSE_MODE verboseMode)
-    {
-        LOGGER.verbose_mode = verboseMode;
-    }
+	public enum VERBOSE_MODE {
+		ALL, INFO, WARNING, ERROR, TOTAL_SILENCE
+	}
 
-    public static void setTextAreaConsole(TextArea tac)
-    {
-        textAreaConsole = tac;
-    }
+	static TextArea textAreaConsole = null;
+	private static VERBOSE_MODE verbose_mode = VERBOSE_MODE.TOTAL_SILENCE;
 
-    private static String history = "console:\n";
+	public static void setVerboseMode(VERBOSE_MODE verboseMode) {
+		LOGGER.verbose_mode = verboseMode;
+	}
 
-    public static void println(String record, VERBOSE_MODE vm)
-    {
-        LOGGER.print(record + "\n", vm);
-    }
+	public static void setTextAreaConsole(TextArea tac) {
+		textAreaConsole = tac;
+	}
 
-    private static DecimalFormat df = new DecimalFormat("000");
+	private static String history = "console:\n";
 
+	public static void println(String record, VERBOSE_MODE vm) {
+		LOGGER.print(record + "\n", vm);
+	}
 
-    public static void print(String record, VERBOSE_MODE vm) {
-        try
-        {
-            // upperbounded by maximum size of the string : 6826363
-            addRecord(record, vm);
-        }
-        catch (OutOfMemoryError e)
-        {
-            System.err.println("OutOfMemory Exception while logging. Application data is not corrupted.");
-            save(prepareDumpName());
-            history = "console:\n";
-        }
-    }
+	private static DecimalFormat df = new DecimalFormat("000");
 
-    private static String prepareDumpName() {
-        return "LOGGERDump" + df.format(count++) + ".txt";
-    }
+	public static void print(String record, VERBOSE_MODE vm) {
+		try {
+			// upperbounded by maximum size of the string : 6826363
+			addRecord(record, vm);
+		} catch (OutOfMemoryError e) {
+			System.err.println("OutOfMemory Exception while logging. Application data is not corrupted.");
+			save(prepareDumpName());
+			history = "console:\n";
+		}
+	}
 
-    private static void addRecord(String record, VERBOSE_MODE vm)
-    {
-        if (verbose_mode == VERBOSE_MODE.TOTAL_SILENCE)
-            return; // Not recommended to use this mode. Nothing would be stored in files as well!
+	private static String prepareDumpName() {
+		return "LOGGERDump" + df.format(count++) + ".txt";
+	}
 
-        if (vm.compareTo(verbose_mode) >= 0)
-        {
-            if (vm.compareTo(VERBOSE_MODE.WARNING) >= 0)
-                System.err.print(record);
-            else
-                System.out.print(record);
-        }
+	private static void addRecord(String record, VERBOSE_MODE vm) {
+		if (verbose_mode == VERBOSE_MODE.TOTAL_SILENCE)
+			return; // Not recommended to use this mode. Nothing would be stored in files as well!
 
-        String r = "\n[:" + vm + ":] " + record;
-        history += r ;
-        if (history.length() > 1048576) // 1024 * 1024, 1 MByte.
-        {
-            save(prepareDumpName());
-            history = "console:\n";
-        }
-        if (textAreaConsole != null)
-            textAreaConsole.setText(history);
+		if (vm.compareTo(verbose_mode) >= 0) {
+			if (vm.compareTo(VERBOSE_MODE.WARNING) >= 0)
+				System.err.print(record);
+			else
+				System.out.print(record);
+		}
 
-    }
-    public static String getHistory() { return history; }
+		String r = "\n[:" + vm + ":] " + record;
+		history += r;
+		if (history.length() > 1048576) // 1024 * 1024, 1 MByte.
+		{
+			save(prepareDumpName());
+			history = "console:\n";
+		}
+		if (textAreaConsole != null)
+			textAreaConsole.setText(history);
+
+	}
+
+	public static String getHistory() {
+		return history;
+	}
 
 }

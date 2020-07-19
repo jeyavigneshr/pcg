@@ -2,53 +2,47 @@ package mario.environment;
 
 public interface Environment {
 
-    public static final int numberOfButtons = 5;
-    public static final int numberOfObservationElements = 486 + 1;
-    public static final int HalfObsWidth = 11;
-    public static final int HalfObsHeight = 11;
+	public static final int numberOfButtons = 5;
+	public static final int numberOfObservationElements = 486 + 1;
+	public static final int HalfObsWidth = 11;
+	public static final int HalfObsHeight = 11;
 
-    // always the same dimensionality: 22x22
-    // always centered on the agent
+	public byte[][] getCompleteObservation(); // default: ZLevelScene = 1, ZLevelEnemies = 0
 
-    // KILLS
-    
+	public byte[][] getEnemiesObservation(); // default: ZLevelEnemies = 0
 
-    // Chaning ZLevel during the game on-the-fly;
-    // if your agent recieves too ambiguous observation, it might request for more precise one for the next step
+	public byte[][] getLevelSceneObservation(); // default: ZLevelScene = 1
 
+	public float[] getMarioFloatPos();
 
-    public byte[][] getCompleteObservation();   // default: ZLevelScene = 1, ZLevelEnemies = 0
+	public int getMarioMode();
 
-    public byte[][] getEnemiesObservation();    // default: ZLevelEnemies = 0
+	public float[] getEnemiesFloatPos();
 
-    public byte[][] getLevelSceneObservation(); // default: ZLevelScene = 1
+	public boolean isMarioOnGround();
 
-    public float[] getMarioFloatPos();
+	public boolean mayMarioJump();
 
-    public int getMarioMode();
+	public boolean isMarioCarrying();
 
-    public float[] getEnemiesFloatPos();
+	public byte[][] getMergedObservationZ(int ZLevelScene, int ZLevelEnemies);
 
-    public boolean isMarioOnGround();
-    public boolean mayMarioJump();
-    public boolean isMarioCarrying();
+	public byte[][] getLevelSceneObservationZ(int ZLevelScene);
 
-    public byte[][] getMergedObservationZ(int ZLevelScene, int ZLevelEnemies);
-    public byte[][] getLevelSceneObservationZ(int ZLevelScene);
-    public byte[][] getEnemiesObservationZ(int ZLevelEnemies);
+	public byte[][] getEnemiesObservationZ(int ZLevelEnemies);
 
-    public int getKillsTotal();
-    public int getKillsByFire();
-    public int getKillsByStomp();
-    public int getKillsByShell();
+	public int getKillsTotal();
 
-    // Pilot (test) additions
-    public boolean canShoot();
-    
-    // For Server usage only, Java agents should use non-bitmap versions.
-    public String getBitmapEnemiesObservation();
+	public int getKillsByFire();
 
-    public String getBitmapLevelObservation();
+	public int getKillsByStomp();
 
+	public int getKillsByShell();
+
+	public boolean canShoot();
+
+	public String getBitmapEnemiesObservation();
+
+	public String getBitmapLevelObservation();
 
 }

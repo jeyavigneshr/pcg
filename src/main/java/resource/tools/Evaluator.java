@@ -21,24 +21,14 @@ import mario.communication.ServerAgent;
 import mario.engine.GlobalOptions;
 import mario.environment.Environment;
 
-//import ch.idsia.mario.engine.GlobalOptions;
-//import ch.idsia.mario.environments.Environment;
-//import ch.idsia.mario.simulation.BasicSimulator;
-//import ch.idsia.mario.simulation.Simulation;
-//import ch.idsia.tools.EvaluationInfo;
-//import ch.idsia.tools.EvaluationOptions;
-//import ch.idsia.tools.ToolsConfigurator;
-//import ch.idsia.tools.evBasicFitnessComparator;
-//import ch.idsia.tools.tcp.Server;
-//import ch.idsia.tools.tcp.ServerAgent;
-
 public class Evaluator implements Runnable{
     Thread thisThread = null;
     EvaluationOptions evaluationOptions;
 
     private List<EvaluationInfo> evaluationSummary = new ArrayList<EvaluationInfo>();
 
-    private void evaluateServerMode()
+    @SuppressWarnings("unchecked")
+	private void evaluateServerMode()
     {
         Server server = new Server(evaluationOptions.getServerAgentPort(), Environment.numberOfObservationElements, Environment.numberOfButtons);
         evaluationOptions.setAgent(new ServerAgent(server, evaluationOptions.isFastTCP()));
@@ -57,15 +47,10 @@ public class Evaluator implements Runnable{
             {
                 resetData = resetData.split("reset\\s*")[1];
                 evaluationOptions.setUpOptions(resetData.split("[\\s]+"));
-                //TODO: Fix this in more general way
                 ((ServerAgent)evaluationOptions.getAgent()).setFastTCP(evaluationOptions.isFastTCP());
                 init(evaluationOptions);
                 // Simulate One Level
                 EvaluationInfo evaluationInfo;
-
-                long startTime = System.currentTimeMillis();
-                String startMessage = "Evaluation started at " + GlobalOptions.getDateTime(null);
-//                LOGGER.println(startMessage, LOGGER.VERBOSE_MODE.ALL);
 
                 simulator.setSimulationOptions(evaluationOptions);
                 evaluationInfo = simulator.simulateOneLevel();
@@ -74,27 +59,8 @@ public class Evaluator implements Runnable{
                 evaluationInfo.levelDifficulty = evaluationOptions.getLevelDifficulty();
                 evaluationInfo.levelRandSeed = evaluationOptions.getLevelRandSeed();
                 evaluationSummary.add(evaluationInfo);
-//                LOGGER.VERBOSE_MODE VM = (evaluationInfo.marioStatus == Mario.STATUS_WIN) ? LOGGER.VERBOSE_MODE.INFO : LOGGER.VERBOSE_MODE.ALL;
-//                LOGGER.println("run finished with result : " + evaluationInfo, VM);
-
-                String fileName = "";
                 if (!this.evaluationOptions.getMatlabFileName().equals(""))
-                    fileName = exportToMatLabFile();
                 Collections.sort(evaluationSummary, new evBasicFitnessComparator());
-
-//                LOGGER.println("Entire Evaluation Finished with results:", LOGGER.VERBOSE_MODE.ALL);
-//                for (EvaluationInfo ev : evaluationSummary)
-//                {
-//                    LOGGER.println(ev.toString(), LOGGER.VERBOSE_MODE.ALL);
-//                }
-                long currentTime = System.currentTimeMillis();
-                long elapsed = currentTime - startTime;
-//                LOGGER.println(startMessage, LOGGER.VERBOSE_MODE.ALL);
-//                LOGGER.println("Evaluation Finished at " + GlobalOptions.getDateTime(null), LOGGER.VERBOSE_MODE.ALL);
-//                LOGGER.println("Total Evaluation Duration (HH:mm:ss:ms) " + GlobalOptions.getDateTime(elapsed), LOGGER.VERBOSE_MODE.ALL);
-//                if (!fileName.equals(""))
-//                    LOGGER.println("Exported to " + fileName, LOGGER.VERBOSE_MODE.ALL);
-//                return evaluationSummary;
             }
             else
             {
@@ -104,7 +70,8 @@ public class Evaluator implements Runnable{
         }
     }
 
-    public List<EvaluationInfo> evaluate()
+    @SuppressWarnings("unchecked")
+	public List<EvaluationInfo> evaluate()
     {
         if (this.evaluationOptions.isServerMode() )
         {
@@ -114,59 +81,21 @@ public class Evaluator implements Runnable{
 
 
         Simulation simulator = new BasicSimulator(evaluationOptions.getSimulationOptionsCopy());
-        // Simulate One Level
-
         EvaluationInfo evaluationInfo;
 
-        long startTime = System.currentTimeMillis();
-        String startMessage = "Evaluation started at " + GlobalOptions.getDateTime(null);
-//        LOGGER.println(startMessage, LOGGER.VERBOSE_MODE.ALL);
-
-//        boolean continueCondition;
-//        int i = 0;
-//        do
-//        {
-//            LOGGER.println("Attempts left: " + (evaluationOptions.getNumberOfTrials() - ++i ), LOGGER.VERBOSE_MODE.ALL);
             evaluationInfo = simulator.simulateOneLevel();
-                                                        
             evaluationInfo.levelType = evaluationOptions.getLevelType();
             evaluationInfo.levelDifficulty = evaluationOptions.getLevelDifficulty();
             evaluationInfo.levelRandSeed = evaluationOptions.getLevelRandSeed();
             evaluationSummary.add(evaluationInfo);
-//            LOGGER.VERBOSE_MODE VM = (evaluationInfo.marioStatus == Mario.STATUS_WIN) ? LOGGER.VERBOSE_MODE.INFO : LOGGER.VERBOSE_MODE.ALL;
-//            LOGGER.println("run  finished with result : " + evaluationInfo, VM);
-//            continueCondition = !GlobalOptions.StopSimulationIfWin || !(evaluationInfo.marioStatus == Mario.STATUS_WIN);
-//        }
-//        while ((evaluationOptions.getNumberOfTrials() > i || evaluationOptions.getNumberOfTrials() == -1 ) && continueCondition);
-
-        String fileName = "";
         if (!this.evaluationOptions.getMatlabFileName().equals(""))
-           fileName = exportToMatLabFile();
         Collections.sort(evaluationSummary, new evBasicFitnessComparator());
-
-//        LOGGER.println("Entire Evaluation Finished with results:", LOGGER.VERBOSE_MODE.ALL);
-//        for (EvaluationInfo ev : evaluationSummary)
-//        {
-//             LOGGER.println(ev.toString(), LOGGER.VERBOSE_MODE.ALL);
-//        }
-        long currentTime = System.currentTimeMillis();
-        long elapsed = currentTime - startTime;
-//        LOGGER.println(startMessage, LOGGER.VERBOSE_MODE.ALL);
-//        LOGGER.println("Evaluation Finished at " + GlobalOptions.getDateTime(null), LOGGER.VERBOSE_MODE.ALL);
-//        LOGGER.println("Total Evaluation Duration (HH:mm:ss:ms) " + GlobalOptions.getDateTime(elapsed), LOGGER.VERBOSE_MODE.ALL);
-//        if (!fileName.equals(""))
-//            LOGGER.println("Exported to " + fileName, LOGGER.VERBOSE_MODE.ALL);
         return evaluationSummary;
     }
 
-//    public void verbose(String message, LOGGER.VERBOSE_MODE verbose_mode)
-//    {
-//        LOGGER.println(message, verbose_mode);
-//    }
 
     public void getMeanEvaluationSummary()
     {
-        //TODO: SK
     }
 
     public String exportToMatLabFile()
@@ -236,6 +165,7 @@ public class Evaluator implements Runnable{
             thisThread = new Thread(this);
     }
 }
+
 class evCoinsFitnessComparator implements Comparator
 {
     public int compare(Object o, Object o1)
