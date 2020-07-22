@@ -30,12 +30,12 @@ public class Art {
 	public static Image logo;
 	public static Image titleScreen;
 	final static String curDir = System.getProperty("user.dir");
-	final static String img = curDir + "/../img/";
+	final static String img = curDir + File.separator+"img"+File.separator;
 
 	public static void init(GraphicsConfiguration gc) {
 		try {
-//            System.out.println("Image Directory: " + img);
-//            System.out.println(curDir);
+            System.out.println("Image Directory: " + img);
+            System.out.println(curDir);
 			mario = cutImage(gc, "mariosheet.png", 32, 32);
 			smallMario = cutImage(gc, "smallmariosheet.png", 16, 16);
 			fireMario = cutImage(gc, "firemariosheet.png", 32, 32);
@@ -60,7 +60,8 @@ public class Art {
 		// System.out.println("trying to get " + imageName);
 		BufferedImage source = null;
 		try {
-			source = ImageIO.read(Art.class.getResourceAsStream(imageName));
+			//source = ImageIO.read(Art.class.getResourceAsStream(imageName));
+			source = ImageIO.read(Art.class.getResource("/imgs/"+imageName));
 			// System.out.println("source: " + source);
 		} catch (Exception e) {
 			e.printStackTrace();

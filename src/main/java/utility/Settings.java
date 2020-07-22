@@ -14,8 +14,8 @@ public class Settings {
 	public static final double MAX_VALUE = 1000000.0;
 	public static final boolean ACCESSIBLE = true;
 	public static final String CMD_SEPARATOR = " ";
-	public static final String WASSERSTEIN_PATH = "pytorch" + File.separator + "generator_ws.py";
-	public static final String WASSERSTEIN_GAN = "pytorch" + File.separator + "netG_epoch_5000.pth";
+	public static final String WASSERSTEIN_PATH = "gan_python" + File.separator + "generator_webservice.py";
+	public static final String WASSERSTEIN_GAN = "gan_python" + File.separator + "netG_epoch_5000.pth";
 	public static final String GAN_DIM = "32";
 
 	public static String PYTHON_PROGRAM = "/usr/bin/python";
