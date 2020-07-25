@@ -2,23 +2,27 @@ package competition.icegic.robin.astar.level;
 
 import competition.icegic.robin.astar.sprites.Sprite;
 
-public class SpriteTemplate implements Cloneable {
-	public int lastVisibleTick = -1;
-	public Sprite sprite;
-	public boolean isDead = false;
-	private int type;
-	
-	public int getType() {
-		return type;
-	}
+public class SpriteTemplate implements Cloneable
+{
+    public int lastVisibleTick = -1;
+    public Sprite sprite;
+    public boolean isDead = false;
 
-	@Override
-	public Object clone() throws CloneNotSupportedException {
-		return super.clone();
-	}
+    public int getType() {
+        return type;
+    }
 
-	public SpriteTemplate(int type, boolean winged) {
-		this.type = type;
-	}
+    private int type;
+    
+    @Override
+	public Object clone() throws CloneNotSupportedException
+    {
+    	return super.clone();
+    	
+    }
+    public SpriteTemplate(int type, boolean winged)
+    {
+        this.type = type;
+    }
 
 }
