@@ -54,14 +54,14 @@ if torch.cuda.is_available() and not opt.cuda:
 map_size = 32
 
 if opt.problem == 0:
-    examplesJson = "examplemario1.json"
+    examplesJson = "json_input/examplemario-1-3.txt.json"
 else:
-    examplesJson = "sepEx/examplemario{}.json".format(opt.problem)
+    examplesJson = "json_input/examplemario{}.json".format(opt.problem)
 X = np.array(json.load(open(examplesJson)))
 print(X)
 print("SHAPE ", X.shape)
 
-z_dims = 10
+z_dims = 14
 num_batches = X.shape[0] / opt.batchSize
 
 X_onehot = np.eye(z_dims, dtype='uint8')[X]
